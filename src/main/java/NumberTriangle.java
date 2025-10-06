@@ -134,11 +134,10 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        List<int[]> tree_lines = new ArrayList();
+        List<int[]> treeLines = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        //NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
@@ -148,14 +147,14 @@ public class NumberTriangle {
             for (int i = 0; i < tree_strings.length; i++) {
                 tree_ints[i] = Integer.parseInt(tree_strings[i]);
             }
-            //add array of ints to tree_lines
-            tree_lines.add(tree_ints);
+            //add array of ints to treeLines
+            treeLines.add(tree_ints);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
-        return NumberTriangle.convert(tree_lines);
+        return NumberTriangle.convert(treeLines);
     }
     private static NumberTriangle convert(List<int[]> tree_lines) {
         return NumberTriangle.build(tree_lines, 0, 0);
