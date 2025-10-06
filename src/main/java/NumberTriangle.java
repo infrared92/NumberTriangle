@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -57,9 +59,9 @@ public class NumberTriangle {
      * Set the root of this NumberTriangle to be the max path sum
      * of this NumberTriangle, as defined in Project Euler problem 18.
      * After this method is called, this NumberTriangle should be a leaf.
-     *
+     * <p>
      * Hint: think recursively and use the idea of partial tracing from first year :)
-     *
+     * <p>
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
@@ -76,27 +78,49 @@ public class NumberTriangle {
      * Follow path through this NumberTriangle structure ('l' = left; 'r' = right) and
      * return the root value at the end of the path. An empty string will return
      * the root of the NumberTriangle.
-     *
+     * <p>
      * You can decide if you want to use a recursive or an iterative approach in your solution.
-     *
+     * <p>
      * You can assume that:
-     *      the length of path is less than the height of this NumberTriangle structure.
-     *      each character in the string is either 'l' or 'r'
+     * the length of path is less than the height of this NumberTriangle structure.
+     * each character in the string is either 'l' or 'r'
      *
      * @param path the path to follow through this NumberTriangle
      * @return the root value at the location indicated by path
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        if(path.equals("")) {
+            return this.root;
+        }
+
+        for (int i = 0; i<path.length(); i++) {
+            if  (path.charAt(i) == 'l' && i == path.length()-1) {
+                return this.left.getRoot();
+            }
+            else if (path.charAt(i) == 'r' && i == path.length()-1) {
+                return this.right.getRoot();
+            }
+            else{
+                if  (path.charAt(i) == 'l') {
+                    return this.left.retrieve(path.substring(i+1));
+                }
+                else{
+                    return this.right.retrieve(path.substring(i+1));
+                }
+
+            }
+        }
+
         return -1;
     }
 
-    /** Read in the NumberTriangle structure from a file.
-     *
+    /**
+     * Read in the NumberTriangle structure from a file.
+     * <p>
      * You may assume that it is a valid format with a height of at least 1,
      * so there is at least one line with a number on it to start the file.
-     *
+     * <p>
      * See resources/input_tree.txt for an example NumberTriangle format.
      *
      * @param fname the file to load the NumberTriangle structure from
@@ -110,27 +134,40 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        List<int[]> tree_lines = new ArrayList();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
+        //NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            // convert line into an array of ints
+            String[] tree_strings = line.split(" ");
+            int[] tree_ints = new int[tree_strings.length];
+            for (int i = 0; i < tree_strings.length; i++) {
+                tree_ints[i] = Integer.parseInt(tree_strings[i]);
+            }
+            //add array of ints to tree_lines
+            tree_lines.add(tree_ints);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
-        return top;
+        return NumberTriangle.convert(tree_lines);
     }
-
+    private static NumberTriangle convert(List<int[]> tree_lines) {
+        return NumberTriangle.build(tree_lines, 0, 0);
+    }
+    private static NumberTriangle build(List<int[]> treeLines, int row, int index) {
+        NumberTriangle node = new NumberTriangle(treeLines.get(row)[index]);
+        if (row < treeLines.size() - 1) {
+            node.setLeft(build(treeLines, row + 1, index));
+            node.setRight(build(treeLines, row + 1, index + 1));
+        }
+        return node;
+    }
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
@@ -140,5 +177,6 @@ public class NumberTriangle {
         // Problem 18 from project Euler [not for credit]
         mt.maxSumPath();
         System.out.println(mt.getRoot());
+        System.out.println("Some change made!");
     }
 }
