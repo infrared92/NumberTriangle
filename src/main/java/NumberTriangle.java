@@ -134,7 +134,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        List<int[]> tree_lines = new ArrayList();
+        List<int[]> tree_lines = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
